@@ -1,0 +1,64 @@
+html,
+body {
+	margin: 0;padding: 0;
+}
+
+.buttons {width: 700px; height: 20px; margin: 50px;
+}
+
+.vermut_button {
+	display: inline-block;
+	overflow: hidden;
+	padding: 10px 30px;	
+	margin: 20px;
+	text-align: center;
+	font-size: 14pt;
+	font-family: arial;
+}
+
+.button_1 {
+	color: #111;
+    text-decoration: none; /* Убираем подчеркивание ссылки */
+    background: #fd970b; /* Цвет фона кнопки по умолчанию */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb319', endColorstr='#ff8000'); /* Градиент кнопки */
+    background: -webkit-gradient(linear, left top, left bottom, from(#fbb319), to(#ff8000)); /* Градиент кнопки */
+    background: -moz-linear-gradient(top,  #fbb319,  #ff8000); /* Градиент кнопки */
+    background: gradient(linear, top,  #fbb319,  #ff8000); /* Градиент кнопки */
+    border: 1px solid #ff8000; /* Обводка кнопки */
+}
+
+.button_2 {
+	color: #fff;
+    text-decoration: none; /* Убираем подчеркивание ссылки */
+    background: #0bba0c; /* Цвет фона кнопки по умолчанию */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#13d10f', endColorstr='#02a009'); /* Градиент кнопки */
+    background: -webkit-gradient(linear, left top, left bottom, from(#13d10f), to(#02a009)); /* Градиент кнопки */
+    background: -moz-linear-gradient(top,  #13d10f,  #02a009); /* Градиент кнопки */
+    background: gradient(linear, top,  #13d10f,  #02a009); /* Градиент кнопки */
+    border: 1px solid #028c1f; /* Обводка кнопки */
+}
+
+.button_3 {
+	color: #a7e0ff;
+    text-decoration: none; /* Убираем подчеркивание ссылки */
+    background: #0973bb; /* Цвет фона кнопки по умолчанию */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0f97d0', endColorstr='#0454a8'); /* Градиент кнопки */
+    background: -webkit-gradient(linear, left top, left bottom, from(#0f97d0), to(#0454a8)); /* Градиент кнопки */
+    background: -moz-linear-gradient(top,  #0f97d0,  #0454a8); /* Градиент кнопки */
+    background: gradient(linear, top,  #0f97d0,  #0454a8); /* Градиент кнопки */
+    border: 1px solid #0454a8; /* Обводка кнопки */
+}
+
+.button_b {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	khtml-border-radius: 4px;
+}
+
+.button_v {
+	border-radius: 20px;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	khtml-border-radius: 20px;
+}
