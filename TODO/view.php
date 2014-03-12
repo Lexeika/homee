@@ -1,17 +1,18 @@
 <?
-$mysql_host = "localhost";  
-$mysql_user = "root";
-$mysql_passwd = "";
+include("mysqlconnect.php");
+//$mysql_host = "localhost";  
+//$mysql_user = "root";
+//$mysql_passwd = "";
+//
+//$mysql_dbname = "test";
+//$bodyname = "test.php";
+//$db = @mysql_connect($mysql_host,$mysql_user,$mysql_passwd);  //подключаемся mysql
+//if (!$db) die("error!");  //выводим ошибку в случае неудачи
+//
+//$result = @mysql_select_db($mysql_dbname,$db);  //выбираем базу данных
+//if (!$result) echo("error!");  //выводим ошибку в случае неудачи
 
-$mysql_dbname = "test";
-$bodyname = "test.php";
-$db = @mysql_connect($mysql_host,$mysql_user,$mysql_passwd);  //подключаемся mysql
-if (!$db) die("error!");  //выводим ошибку в случае неудачи
-
-$result = @mysql_select_db($mysql_dbname,$db);  //выбираем базу данных
-if (!$result) echo("error!");  //выводим ошибку в случае неудачи
-
-    $result = mysql_query("select * from guest_book",$db);    //делаем запрос SELECT в таблице
+    $result = mysql_query("select * from new_tbl",$db);    //делаем запрос SELECT в таблице
     while ($myrow = mysql_fetch_array($result))   //в цикле передаем данные из таблицы в массив
     {
         print "<fieldset>\n";   //создаем рамку
