@@ -1,66 +1,88 @@
 <?
-header('Content-Type: text/html; charset=utf-8');
+
 $mysql_host = "localhost";  
 $mysql_user = "root";
 $mysql_passwd = "";
+
 $mysql_dbname = "remont";
 
-$db = @mysql_connect($mysql_host,$mysql_user,$mysql_passwd);  //РїРѕРґРєР»СЋС‡Р°РµРјСЃСЏ mysql
-if (!$db) die("error!");  //РІС‹РІРѕРґРёРј РѕС€РёР±РєСѓ РІ СЃР»СѓС‡Р°Рµ РЅРµСѓРґР°С‡Рё
+$db = @mysql_connect($mysql_host,$mysql_user,$mysql_passwd);  //подключаемся mysql
+if (!$db) die("error!");  //выводим ошибку в случае неудачи
+mysql_query("SET NAMES cp1251");
 
-$result = @mysql_select_db($mysql_dbname,$db);  //РІС‹Р±РёСЂР°РµРј Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
-if (!$result) echo("error!");  //РІС‹РІРѕРґРёРј РѕС€РёР±РєСѓ РІ СЃР»СѓС‡Р°Рµ РЅРµСѓРґР°С‡Рё
+$result = @mysql_select_db($mysql_dbname,$db);  //выбираем базу данных
+if (!$result) echo("error!");  //выводим ошибку в случае неудачи
     
     
-    // Р·Р°РґР°РµРј РєРѕР»-РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Рµ    
-    $on_pages = 5;
-    // РїРѕР»СѓС‡Р°РµРј РєРѕР»-РІРѕ Р·Р°РїРёСЃРµР№ РёР· Р‘Р”
+    // задаем кол-во элементов на странице    
+    $on_pages = 2;
+    // получаем кол-во записей из БД
     $res = mysql_query ("select count(*) from remont", $db);
     $row = mysql_fetch_row ($res);
     $count = $row[0];
-    if ($count == 0) echo ("РќР•Рў РќР РћР”РќРћР™ Р—РђРџРРЎР");
-    // РІС‹С‡РёСЃР»СЏРµРј РєРѕР»-РІРѕ СЃС‚СЂР°РЅРёС†
+    if ($count == 0) echo ("НЕТ НИ ОДНОЙ ЗАПИСИ");
+    // вычисляем кол-во страниц
     $num_pages = ceil ($count / $on_pages);
-    // РїРµСЂРµРјРµРЅРЅРѕР№ Р·Р°РґР°РµРј РЅРѕРјРµСЂ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹ РёР· РїР°СЂР°РјРµС‚СЂР° "page"
+    // переменной задаем номер текущей страницы из параметра "page"
     $current_page = ($_GET["page"]);
-    // РµСЃР»Рё С‚РµРєСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° РјРµРЅСЊС€Рµ РµРґРёРЅРёС†С‹, С‚Рѕ СЃС‚СЂР°РЅРёС†Р° СЂР°РІРЅР° 1
+    // если текущая страница меньше единицы, то страница равна 1
     if ($current_page < 1)
     {
         $current_page = 1;
     }
-    // РµСЃР»Рё С‚РµРєСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° СЂР°РІРЅР° Р±РѕР»СЊС€Рµ РѕР±С‰РµРіРѕ С‡РёСЃР»Р° СЃС‚СЂР°РЅРёС†,
-    // С‚Рѕ С‚РµРєСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° СЂР°РІРЅР° РєРѕР»-РІСѓ СЃС‚СЂР°РЅРёС†
+    // если текущая страница равна больше общего числа страниц,
+    // то текущая страница равна кол-ву страниц
     elseif ($current_page > $num_pages)
     {
         $current_page = $num_pages;
     }
-    // РІС‹С‡РёСЃР»СЏРµРј СЃ РєР°РєРѕР№ Р·Р°РїРёСЃРё РґРµР»Р°С‚СЊ РІС‹Р±РѕСЂРєСѓ РґР°РЅРЅС‹С…
+    // вычисляем с какой записи делать выборку данных
     $offset = ($current_page - 1) * $on_pages;
-    // РґРµР»Р°РµРј Р·Р°РїСЂРѕСЃ SELECT РІ С‚Р°Р±Р»РёС†Рµ СЃ РѕРїРµСЂР°С‚РѕСЂРѕРј limit
+    // делаем запрос SELECT в таблице с оператором limit
     $result = mysql_query("select * from remont limit $offset, $on_pages",$db);
-    // РІ С†РёРєР»Рµ РїРµСЂРµРґР°РµРј РґР°РЅРЅС‹Рµ РёР· С‚Р°Р±Р»РёС†С‹ РІ РјР°СЃСЃРёРІ
+    print "<style>"; 
+    ?>
+        table td {
+            border: 1px solid; width: 100%
+        }
+    <?
+    print "</style>";
+    print "<table>\n";
+    // в цикле передаем данные из таблицы в массив
     while ($myrow = mysql_fetch_array($result))   
     {
-        // СЃРѕР·РґР°РµРј СЂР°РјРєСѓ
-        print "<fieldset>\n";
-        // Р·Р°РіРѕР»РѕРІРѕРє СЂР°РјРєРё
-        print "<legend>РЎРѕРѕР±С‰РµРЅРёРµ</legend>\n";  
-        // РІС‹РІРѕРґРёРј РґР°РЅРЅС‹Р№ РЅР° СЃС‚СЂР°РЅРёС†Сѓ 
+        // создаем рамку
+        
+        // заголовок рамки
+        // выводим данный на страницу 
         if ($myrow['status'] == 0)
         {
-            echo ("<b>РљРѕРґ СЃР°Р»РѕРЅР°:</b> ".$myrow['code']."<br> <b>РќР°Р·РІР°РЅРёРµ СЃР°Р»РѕРЅР°:</b> ".$myrow['name']." <br> <b>РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ: </b> ".$myrow['device']."<br> <b>РћРїРёСЃР°РЅРёРµ РїСЂРѕР±Р»РµРјС‹: </b> ".$myrow['problems']."<br><b>РљРѕРЅС‚Р°РєС‚: </b>".$myrow['contact']."<br> <b>РљРѕРјРјРµРЅС‚Р°СЂРёР№: </b>".$myrow['comment']."<br> <b>Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ:</b>".$myrow['date']."<br> <b>РЎС‚Р°С‚СѓСЃ: </b>Р—Р°РєСЂС‹С‚Р°\n"); 
-                 
+            print "<tr>\n";
+            echo ("<td width='30%'>".$myrow['code']."</td><td>".
+                  $myrow['name']."</td><td>".$myrow['device']."</td><td>".
+                  $myrow['problems']."</td><td>".$myrow['contact']."</td><td>".
+                  $myrow['comment']."</td><td>".
+                  $myrow['date']."</td><td>Закрыта</td>\n"); 
+            print "</tr>\n";     
         }
         elseif ($myrow['status'] == 1)
         {
-            echo ("<b>РљРѕРґ СЃР°Р»РѕРЅР°:</b> ".$myrow['code']."<br> <b>РќР°Р·РІР°РЅРёРµ СЃР°Р»РѕРЅР°:</b> ".$myrow['name']." <br> <b>РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ: </b> ".$myrow['device']."<br> <b>РћРїРёСЃР°РЅРёРµ РїСЂРѕР±Р»РµРјС‹: </b> ".$myrow['problems']."<br><b>РљРѕРЅС‚Р°РєС‚: </b>".$myrow['contact']."<br> <b>РљРѕРјРјРµРЅС‚Р°СЂРёР№: </b>".$myrow['comment']."<br> <b>Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ:</b>".$myrow['date']."<br> <b>РЎС‚Р°С‚СѓСЃ: </b>РћС‚РєСЂС‹С‚Р°\n");
-                  
+            print "<tr>\n";
+            echo ("<td width='30%'>".$myrow['code']."</td><td>".
+                  $myrow['name']."</td><td>".
+                  $myrow['device']."</td><td>".
+                  $myrow['problems']."</td><td>".
+                  $myrow['contact']."</td><td>".
+                  $myrow['comment']."</td><td>".
+                  $myrow['date']."</td><td>Открыта</td>\n");
+            print "</tr>\n";      
         }
-        print "<br><a href='action.php?open=".$myrow['id']."'>РћС‚РєСЂС‹С‚СЊ</a> | <a href='action.php?close=".$myrow['id']."'>Р—Р°РєСЂС‹С‚СЊ</a>  |  <a href='action.php?delete=".$myrow['id']."'>РЈРґР°Р»РёС‚СЊ</a>";
-        print "</fieldset>\n";
+        
+        print "<tr><td colspan=8><a href='action.php?open=".$myrow['id']."'>Открыть</a> | <a href='action.php?close=".$myrow['id']."'>Закрыть</a>  |  <a href='action.php?delete=".$myrow['id']."'>Удалить</a></td></tr>";
+        
     }
-    
-         // РІС‹РІРѕРґРёРј СЃРїРёСЃРѕРє СЃС‚СЂР°РЅРёС† Рё РїРѕРјРµС‡Р°РµРј Р°РєС‚РёРІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ   
+        print "</table>\n";
+         // выводим список страниц и помечаем активную страницу   
 echo '<p>';
     
     for ($page = 1; $page <= $num_pages; $page++)
@@ -78,6 +100,6 @@ echo '<p>';
     
 echo '</p>';
 
-    print "<br><a href = index.html>РіР»Р°РІРЅР°СЏ</a>";
-           
+    print "<br><a href = index.html>главная</a>";
+        
 ?>

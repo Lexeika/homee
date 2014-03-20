@@ -6,8 +6,8 @@ $mysql_user = "root";
 $mysql_passwd = "";
 $mysql_dbname = "remont";
 $db = @mysql_connect($mysql_host,$mysql_user,$mysql_passwd);
-if (!$db) die("error!!!");
 mysql_query("SET NAMES cp1251");
+if (!$db) die("error!!!");
 
 $result = @mysql_select_db($mysql_dbname,$db);
 if ($_POST)
@@ -43,20 +43,22 @@ if (!$new_code or !$new_name or !$new_device or !$new_contact or !$new_problem o
         print "Опишите проблему";
     }
     
+    
 }
 else
 {
     $date = date("Y-m-d H:i:s");
-    $result = mysql_query("insert into remont (`date`,`code`,`name`,`device`,`problems`, `contact`, `comment`,`status`) values ('$date','$new_code','$new_name','$new_device','$new_problem','$new_contact','$new_problem','1')",$db);
-
+    $result = mysql_query("insert into remont (`date`,`code`,`name`,`device`,`problems`, `contact`, `comment`,`status`) values ('$date','$new_code','$new_name','$new_device','$new_problem','$new_contact','$new_comment','1')",$db);
+    
     if (!$result) 
     {
-        echo "error!!!!".mysql_error();
+        echo "Ошибка добавления данных".mysql_error();
     }
     else
     {
         printf ("Запись добавлена");
         print "<br><a href = index.html>главная</a>";
+        print "<br><a href = view.php>просмотр</a>";
     }
 }
 mysql_close($db);
